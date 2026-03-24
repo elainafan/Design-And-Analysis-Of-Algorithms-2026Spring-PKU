@@ -1,0 +1,136 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage{ctex}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\usepackage{enumitem}
+
+\newtheorem{problem}{题} 
+\renewcommand{\proofname}{\textbf{解答}}
+\usepackage[margin=1in]{geometry}
+
+\title{算法设计与分析 \ 作业一}
+\author{xxxxxxx xxx}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{problem}[1.2]
+\end{problem}
+
+\begin{proof}
+    \leavevmode
+    \begin{enumerate}[label=(\arabic*)]
+        \item 最坏情况为输入的原数组为降序排列，需要的比较次数为：
+              \[ \sum_{i=1}^{n}(n-i) = \frac{n(n-1)}{2} \]
+        \item 最坏情况为输入的原数组为降序排列。可以观察到，每次比较都会发生一次交换，从而需要的比较次数为 $\frac{n(n-1)}{2}$。
+    \end{enumerate}
+\end{proof}
+
+\vspace{1em}
+
+\begin{problem}[1.6]
+\end{problem}
+
+\begin{proof}
+    显然，该算法求解的是将数组 $P$ 的元素视为多项式
+    \[ F(x) = P_{n}x^n + P_{n-1}x^{n-1} + \ldots + P_0 \]
+    的系数，并代入 $x$ 进行求值，得到结果 $y=F(x)$。
+
+    其中乘法运算的次数为 $2n$，加法运算的次数为 $n$。
+\end{proof}
+
+\vspace{1em}
+
+\begin{problem}[1.8]
+\end{problem}
+\begin{proof}
+    首先考虑每个位置作为最后一个位置的概率，设为 $P(i)$。则：
+    \[ P(i) = \frac{p}{2^{i-1}} \]
+
+    于是有平均查找长度 $A(n)$：
+    \[ A(n) = \sum_{i=1}^{n} \frac{p}{2^{i-1}} \cdot i \approx 4p \]
+
+    又由于概率之和为 1，即：
+    \[ \sum_{i=1}^{n} \frac{p}{2^{i-1}} = 1 \implies p = \frac{1}{2} \]
+
+    综合上述结果，可得 $A(n) \approx 2$。
+\end{proof}
+
+\vspace{1em}
+
+\begin{problem}[1.12]
+\end{problem}
+
+\begin{proof}
+    由洛必达法则可得：
+    \begin{align*}
+        \lim_{n \to +\infty} \frac{\log_{b}n}{n^{\alpha}}
+         & = \lim_{n \to +\infty} \frac{\frac{1}{n \ln b}}{\alpha n^{\alpha-1}} \\
+         & = \lim_{n \to +\infty} \frac{1}{\alpha \ln b \cdot n^{\alpha}}       \\
+         & = 0
+    \end{align*}
+    因此有 $\log_{b}n = O(n^{\alpha})$。
+\end{proof}
+
+\vspace{1em}
+
+\begin{problem}[1.15]
+\end{problem}
+
+\begin{proof}
+    \leavevmode
+    \begin{enumerate}
+        \item[(2)] 取极限，显然有 $f(n) = O(g(n))$。
+        \item[(4)] 取极限，显然有 $g(n) = O(f(n))$。
+    \end{enumerate}
+\end{proof}
+
+\vspace{1em}
+
+\begin{problem}[1.18]
+\end{problem}
+
+\begin{proof}
+    比较阶数，显然可以发现按照阶数排序有：
+    \[ n!, \quad 2^{2n}, \quad n 2^{n}, \quad (\log n)^{\log n} = \Theta(n^{\log \log n}), \quad n^3, \quad n \log n = \Theta(\log(n!)), \quad n, \quad 2^{\log \sqrt{n}}, \quad 2^{\sqrt{2 \log n}}, \quad \log n = \Theta\left(\sum_{k=1}^{n}\frac{1}{k}\right), \quad \log \log n \]
+\end{proof}
+
+\vspace{1em}
+
+\begin{problem}[1.19]
+\end{problem}
+
+\begin{proof}
+    \leavevmode
+    \begin{enumerate}
+        \item[(2)] 由主定理可知，此时可视为 $a=9, \ b=3, \ f(n)=n$ 的情况，因此 $T(n) = \Theta(n^2)$。
+        \item[(4)] 由数学归纳法：
+              \[ T(n) = \sum_{i=2}^{n} i \log 3 + T(1) = 1 + \frac{(n-1)(n+2)}{2} \log 3 = \Theta(n^2) \]
+        \item[(6)] 由主定理可知，此时可视为 $a=2, \ b=2, \ f(n)=n^2 \log n$。由于存在常数 $c=\frac{3}{4} < 1$ 使得：
+              \[ 2f\left(\frac{n}{2}\right) = \frac{n^2}{2} \log\left(\frac{n}{2}\right) \leq \frac{n^2}{2} \log n \leq cn^2 \log n = cf(n) \]
+              于是，可得 $T(n) = \Theta(n^2 \log n)$。
+    \end{enumerate}
+\end{proof}
+
+\vspace{1em}
+
+\begin{problem}[1.21]
+\end{problem}
+
+\begin{proof}
+    \leavevmode
+    容易得到：
+    \begin{itemize}
+        \item 算法 $A$ 的递推方程为 $T(n) = T\left(\frac{n}{5}\right) + O(n)$，解得 $T(n) = \Theta(n)$。
+        \item 算法 $B$ 的递推方程为 $T(n) = 2T(n-1) + O(n)$，解得 $T(n) = \Theta(2^n)$。
+        \item 算法 $C$ 的递推方程为 $T(n) = 9T\left(\frac{n}{3}\right) + O(n^3)$，解得 $T(n) = \Theta(n^3)$。
+    \end{itemize}
+    容易比较得出，最坏情况下时间复杂度最低的是 \textbf{算法 $\mathbf{A}$}。
+\end{proof}
+
+\end{document}
