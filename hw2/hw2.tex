@@ -1,0 +1,268 @@
+%!TEX TS-program = xelatex
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[fontset=macnew]{ctex}
+% 修复 macOS 下缺少华文仿宋 (STFangsong) 导致代码环境中调用等宽字体时报错的问题
+\renewcommand{\CJKttdefault}{zhkai}
+
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\usepackage{enumitem}
+\usepackage[ruled,vlined]{algorithm2e}
+
+\newtheorem{problem}{题} 
+\renewcommand{\proofname}{\textbf{解答}}
+\usepackage[margin=1in]{geometry}
+
+\title{算法设计与分析 作业二}
+\author{xxxxxxxxx xxx}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{problem}[2.7]
+\end{problem}
+
+\begin{proof}
+    \leavevmode
+    \begin{enumerate}[label=(\arabic*)]
+    \item 首先使用 $O(n \log n)$ 的复杂度将原数组排序，随后只需要顺序统计，如果有比当前元素更多的新元素，就替换，最后统计最多元素的个数是否大于 $\frac{n}{2}$ 。
+    \item 首先可以用 $O(n)$ 的时间找出中位数，随后只需要统计中位数的出现次数是否大于 $\frac{n}{2}$ 即可，时间复杂度为 $O(n)$ 。
+    \item 考虑摩尔投票，我们选定一个candidate，然后不同的元素两两抵消，如果当前元素等于candidate，就count++，否则count--，当count==0的时候就换candidate，最后再用candidate去验证它的出现次数，时间复杂度为 $O(n)$ 。
+    \end{enumerate}
+\end{proof}
+
+\begin{problem}[2.12]
+\end{problem}
+
+\begin{proof}
+    先对数组 $B$ 排序，然后对于 $A$ 中的不同元素，使用二分查找查找其是否在数组 $B$ 中，若是，则放入数组 $C$ ；时间复杂度为 $O(n \log \log n)$ ，伪代码如下：
+    
+    \begin{algorithm}[H]
+    \caption{求数组交集}
+    \KwIn{数组 $A[1..n]$ 和 $B[1..m]$}
+    \KwOut{数组 $C$ ，使得 $C = A \cap B$}
+    
+    $C \leftarrow \emptyset$\;
+    $L \leftarrow \text{Sort}(B)$ \tcp*{对 $B$ 排序}
+    \For{$i \leftarrow 1$ \KwTo $n$}{
+        $x \leftarrow A[i]$\;
+        $j \leftarrow \text{BinarySearch}(L, x)$ \tcp*{搜索 $x$ ，返回序标 $j$ 否则返回 0}
+        \If{$j > 0$}{
+            $C \leftarrow C \cup \{x\}$\;
+        }
+    }
+    \end{algorithm}
+\end{proof}
+
+\begin{problem}[2.15]
+\end{problem}
+
+\begin{proof}
+    \leavevmode
+    \begin{enumerate}[label=(\arabic*)]
+        \item 对于算法 $A$ ，每次遍历需要 $O(n)$ 次，最坏遍历 $O(\sqrt{n})$ 次，因此最坏情况下的时间复杂度为 $O(n \sqrt{n})$ 。
+
+        对于算法 $B$ ，排序的时间复杂度为 $O(n \log n)$ ，总最坏时间复杂度为 $O(n \log n)$ 。
+        \item 考虑使用快速选择算法，线性时间内找出第 $i$ 大元素 $x$ 。
+
+        再遍历数组，收集大于等于 $x$ 的元素并排序，时间复杂度为 $O(n+n+i \log i) = O(n)$ 。
+        
+        \begin{algorithm}[H]
+        \caption{找出数组中最大的 $i$ 个元素并排序}
+        \KwIn{数组 $A[1..n]$ ，选取个数 $i$}
+        \KwOut{最大 $i$ 个元素的降序数组 $S$}
+        
+        $x \leftarrow \text{QuickSelect}(A, i)$\;
+        $S \leftarrow \emptyset$\;
+        $count \leftarrow 0$\;
+        \For{$k \leftarrow 1$ \KwTo $n$}{
+            \If{$A[k] \ge x$}{
+                $S \leftarrow S \cup \{A[k]\}$\;
+                $count \leftarrow count + 1$\;
+                \If{$count == i$}{
+                    \textbf{break}\;
+                }
+            }
+        }
+        $S \leftarrow \text{Sort}(S)$\;
+        \Return{$S$}\;
+        \end{algorithm}
+    \end{enumerate}
+\end{proof}
+
+\begin{problem}[2.18]
+\end{problem}
+
+\begin{proof}
+    跟2.15题的(2)相似，先计算出每个点到原点的平方距离 $d_i = x_i^2 + y_i^2$ ；然后仍然使用快速选择算法，在 $O(n)$ 时间内找到距离第 $k = \lfloor\sqrt{n}\rfloor$ 小的元素 $k\_dist$ ；
+    
+    接下来遍历所有点，把距离小于等于 $k\_dist$ 的点收集起来。最后对收集到的 $\lfloor\sqrt{n}\rfloor$ 个点进行降序排序，并按要求从远到近输出它们的标号。
+    
+    由于只需对 $\lfloor\sqrt{n}\rfloor$ 个点排序，排序的时间复杂度为 $O(\sqrt{n}\log(\sqrt{n})) \approx O(\sqrt{n}\log n)$ 。总时间复杂度为 $O(n) + O(n) + O(\sqrt{n}\log n) = O(n)$ 。\\
+    伪代码如下：
+    
+    \begin{algorithm}[H]
+    \caption{找距离原点最近的 $\lfloor\sqrt{n}\rfloor$ 个点}
+    \KwIn{$n$ 个点的坐标 $(x_1, y_1), \dots , (x_n, y_n)$}
+    \KwOut{距离最近的 $\lfloor\sqrt{n}\rfloor$ 个点的标号，按距离从远到近输出}
+    
+    $D \leftarrow \text{大小为 } n \text{ 的空数组}$\;
+    \For{$i \leftarrow 1$ \KwTo $n$}{
+        $D[i] \leftarrow (x_i^2 + y_i^2, i)$ \tcp*{记录距离的平方以及原下标}
+    }
+    
+    $k \leftarrow \lfloor\sqrt{n}\rfloor$\;
+    $x \leftarrow \text{QuickSelect}(D, k)$\; \tcp*{基于距离找到第 $k$ 小的元素}
+    
+    $S \leftarrow \emptyset$\;
+    $count \leftarrow 0$\;
+    \For{$i \leftarrow 1$ \KwTo $n$}{
+        \If{$D[i].\text{dist} \le x.\text{dist}$}{
+            $S \leftarrow S \cup \{D[i]\}$\;
+            $count \leftarrow count + 1$\;
+            \If{$count = k$}{
+                \textbf{break}\;
+            }
+        }
+    }
+    
+    $S \leftarrow \text{SortDesc}(S)$\; \tcp*{对这 $k$ 个点按距离从大到小排序}
+    \For{$p \in S$}{
+        \text{Print}(p.\text{index})\;
+    }
+    \end{algorithm}
+\end{proof}
+
+\begin{problem}[3.3]
+\end{problem}
+
+\begin{proof}
+    相当于是一个01背包问题，时间复杂度最坏为 $O(nD)$ ，伪代码如下：
+
+    \begin{algorithm}[H]
+    \caption{货柜存储最大收益算法 (基于动态规划)}
+    \KwIn{货柜数量 $n$，库房总长度 $D$，长度数组 $l[1\dots n]$，收益数组 $v[1\dots n]$}
+    \KwOut{最大存储收益}
+    \tcc{初始化长度为 D+1 的数组，全部置为 0}
+    初始化数组 $dp[0 \dots D] \gets 0$\; 
+    \For{$i \gets 1$ \KwTo $n$}{
+        \tcc{从后向前遍历以保证每个货柜只被放入一次}
+        \For{$j \gets D$ \textbf{downto} $l[i]$}{
+            $dp[j] \gets \max(dp[j], dp[j - l[i]] + v[i])$\;
+        }
+    }   
+    \Return $dp[D]$\;
+    \end{algorithm}
+\end{proof}
+
+\begin{problem}[3.8]
+\end{problem}
+
+\begin{proof}
+    可以视为取值类型的01背包，采用动态规划即可，时间复杂度最坏为 $O(nN)$ ，伪代码如下：
+
+    \begin{algorithm}[H]
+    \caption{集合等和划分算法 (基于动态规划)}
+    \KwIn{正整数集合 $A = \{a_1, a_2, \dots, a_n\}$，元素总和 $N$}
+    \KwOut{布尔值，表示是否能划分成和相等的两个子集}
+    
+    \If{$N \pmod 2 \neq 0$}{
+        \Return \textbf{false}\;
+    }
+    
+    $T \leftarrow N / 2$\;
+    \tcc{初始化长度为 T+1 的布尔数组，仅 dp[0] 为 true}
+    初始化数组 $dp[0 \dots T] \leftarrow \textbf{false}$\;
+    $dp[0] \leftarrow \textbf{true}$\;
+    
+    \For{$i \leftarrow 1$ \KwTo $n$}{
+        \For{$j \leftarrow T$ \textbf{downto} $a_i$}{
+            $dp[j] \gets dp[j] \lor dp[j - a_i]$\;
+        }
+    }
+    \Return $dp[T]$\;
+    \end{algorithm}
+\end{proof}
+
+\begin{problem}[3.10]
+\end{problem}
+
+\begin{proof}
+    这就是二维的01背包，只需要在转移的时候多跑一个体积的维度即可，时间复杂度最坏为 $O(nWV)$ ，伪代码如下：
+    
+    \begin{algorithm}[H]
+    \caption{二维费用 0-1 背包问题}
+    \KwIn{物品数量 $n$，最大重量 $W$，最大体积 $V$，物品的重量 $w[1 \dots n]$、体积 $c[1 \dots n]$ 和价值 $v[1 \dots n]$}
+    \KwOut{最大价值}
+    
+    \tcc{初始化所有状态为0}
+    初始化二维数组 $dp[0 \dots W][0 \dots V] \leftarrow 0$\;
+    
+    \For{$i \leftarrow 1$ \KwTo $n$}{
+        \tcc{重量和体积均需要倒序遍历以保证物品只被装入一次}
+        \For{$j \leftarrow W$ \textbf{downto} $w[i]$}{
+            \For{$k \leftarrow V$ \textbf{downto} $c[i]$}{
+                $dp[j][k] \gets \max(dp[j][k], dp[j - w[i]][k - c[i]] + v[i])$\;
+            }
+        }
+    }
+    \Return $dp[W][V]$\;
+    \end{algorithm}
+\end{proof}
+
+\begin{problem}[3.17]
+\end{problem}
+
+\begin{proof}
+    典型的数字三角形问题，只需要算出每个点的dp值，然后从最后一层贪心一一回溯即可，伪代码如下：
+    
+    \begin{algorithm}[H]
+    \caption{数字三角形最小路径和算法 (自底向上)}
+    \KwIn{数字三角形的行数 $n$，各节点的值 $A[1\dots n][1\dots n]$}
+    \KwOut{最小路径和，以及对应的路径}
+    
+    \tcc{初始化动态规划数组 $dp$ 和路径记录数组 $choice$}
+    $dp \leftarrow \text{大小为 } n \times n \text{ 的数组}$\;
+    $choice \leftarrow \text{大小为 } n \times n \text{ 的数组}$\;
+    
+    \tcc{初始化最后一行}
+    \For{$j \leftarrow 1$ \KwTo $n$}{
+        $dp[n][j] \leftarrow A[n][j]$\;
+    }
+    
+    \tcc{从倒数第二行开始向上递推}
+    \For{$i \leftarrow n-1$ \textbf{downto} $1$}{
+        \For{$j \leftarrow 1$ \KwTo $i$}{
+            \If{$dp[i+1][j] < dp[i+1][j+1]$}{
+                $dp[i][j] \leftarrow A[i][j] + dp[i+1][j]$\;
+                $choice[i][j] \leftarrow 0$ \tcp*{0 表示向下走左边}
+            }
+            \Else{
+                $dp[i][j] \leftarrow A[i][j] + dp[i+1][j+1]$\;
+                $choice[i][j] \leftarrow 1$ \tcp*{1 表示向下走右边}
+            }
+        }
+    }
+    
+    \tcc{根据 choice 数组还原路径}
+    $curr\_j \leftarrow 1$\;
+    $path \leftarrow \text{空列表}$\;
+    \For{$i \leftarrow 1$ \KwTo $n-1$}{
+        $\text{把 } A[i][curr\_j] \text{ 加入 } path$\;
+        $curr\_j \leftarrow curr\_j + choice[i][curr\_j]$\;
+    }
+    $\text{把 } A[n][curr\_j] \text{ 加入 } path$\;
+    
+    \Return $dp[1][1], path$\;
+    \end{algorithm}
+\end{proof}
+
+\vspace{1em}
+
+\end{document}
