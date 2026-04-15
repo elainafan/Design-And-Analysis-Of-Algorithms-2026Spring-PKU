@@ -1,0 +1,207 @@
+%!TEX TS-program = xelatex
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[fontset=windows]{ctex}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\usepackage{enumitem}
+
+\newtheorem{problem}{题} 
+\renewcommand{\proofname}{\textbf{解答}}
+\usepackage[margin=1in]{geometry}
+
+\title{算法设计与分析 作业四}
+\author{xxxxxxxxxx xxx}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{problem}[6.2]
+\end{problem}
+
+\begin{proof}
+    设需要咖啡豆 $1, 2, 3$ 的数量分别为 $x_1, x_2, x_3$ 千克。
+    
+    我们的目标是最小化总成本，因此目标函数为：
+    $$ \min Z = 20x_1 + 28x_2 + 18x_3 $$
+    
+    需要满足的约束条件如下：
+    
+    1. \textbf{生产总量约束}：题目要求生产 1000 千克混合咖啡。
+    $$ x_1 + x_2 + x_3 = 1000 $$
+    
+    2. \textbf{香味等级约束}：混合咖啡的香味等级（加权平均）不低于 75。
+    $$ \frac{75x_1 + 85x_2 + 60x_3}{x_1 + x_2 + x_3} \ge 75 $$
+    即
+    $$ 75x_1 + 85x_2 + 60x_3 \ge 75000 $$
+    
+    3. \textbf{味道等级约束}：混合咖啡的味道等级（加权平均）不低于 80。
+    $$ \frac{86x_1 + 88x_2 + 75x_3}{x_1 + x_2 + x_3} \ge 80 $$
+    即
+    $$ 86x_1 + 88x_2 + 75x_3 \ge 80000 $$
+    
+    4. \textbf{库存与非负约束}：每种咖啡豆的使用量不能超过其库存最大值，且不能为负数。
+    $$ 0 \le x_1 \le 500 $$
+    $$ 0 \le x_2 \le 600 $$
+    $$ 0 \le x_3 \le 400 $$
+    
+    综上所述，该问题的线性规划模型如下：
+    
+    $$
+    \begin{aligned}
+        \min \quad & Z = 20x_1 + 28x_2 + 18x_3 \\
+        \text{s.t.} \quad 
+        & x_1 + x_2 + x_3 = 1000 \\
+        & 75x_1 + 85x_2 + 60x_3 \ge 75000 \\
+        & 86x_1 + 88x_2 + 75x_3 \ge 80000 \\
+        & 0 \le x_1 \le 500 \\
+        & 0 \le x_2 \le 600 \\
+        & 0 \le x_3 \le 400 \\
+    \end{aligned}
+    $$
+\end{proof}
+
+\begin{problem}[6.4]
+\end{problem}
+
+\begin{proof}
+    \textbf{（1）}
+    
+    目标函数：$\max z = x_1 + x_2$。
+    
+    由约束条件在二维平面上作图，可以得到一个多边形可行域。计算该边界多边形的各个顶点坐标为：
+    \begin{itemize}
+        \item $x_1=0, x_2=0$ 交点：$(0, 0)$
+        \item $x_1=5, x_2=0$ 交点：$(5, 0)$
+        \item $x_1=5, x_1+3x_2=11$ 交点：$(5, 2)$
+        \item $x_2=3, x_1+3x_2=11$ 交点：$(2, 3)$
+        \item $x_1=0, x_2=3$ 交点：$(0, 3)$
+    \end{itemize}
+    
+    将各顶点坐标代入目标函数，求得：
+    \begin{itemize}
+        \item $z(0, 0) = 0$
+        \item $z(5, 0) = 5$
+        \item $z(5, 2) = 5 + 2 = 7$
+        \item $z(2, 3) = 2 + 3 = 5$
+        \item $z(0, 3) = 3$
+    \end{itemize}
+    通过比较可知，当 $x_1 = 5, x_2 = 2$ 时，目标函数取得最大值，$\max z = 7$。
+
+    \vspace{1em}
+    \textbf{（3）}
+    
+    目标函数：$\min z = 2x_1 + x_2$。
+    
+    由约束条件可画出可行域。此时虽然可行域向 $x_1$ 正方向延伸是无界的，但对于本题求最小化问题且目标函数系数为正，最优解必定在边界交点产生。其边界的端点（顶点）有三个：
+    \begin{itemize}
+        \item $x_2=0, x_1+x_2=1$ 交点：$(1, 0)$
+        \item $x_1=0, x_1+x_2=1$ 交点：$(0, 1)$
+        \item $x_1=0, x_2=2$ 交点：$(0, 2)$
+    \end{itemize}
+    
+    将各极点坐标代入目标函数，求得：
+    \begin{itemize}
+        \item $z(1, 0) = 2 \times 1 + 0 = 2$
+        \item $z(0, 1) = 2 \times 0 + 1 = 1$
+        \item $z(0, 2) = 2 \times 0 + 2 = 2$
+    \end{itemize}
+    因此，当 $x_1 = 0, x_2 = 1$ 时，目标函数取得最小值，$\min z = 1$。
+\end{proof}
+
+\begin{problem}[6.6]
+\end{problem}
+
+\begin{proof}
+    \textbf{（1）}图解法求最优解：
+    
+    由给定的约束条件可绘制出可行域，其边界的一系列顶点分别由各约束直线的交点构成。计算各图解法顶点如下：
+    \begin{itemize}
+        \item $x_1=0, x_2=0$ 交点：$(0, 0)$
+        \item $x_1=5, x_2=0$ 交点：$(5, 0)$
+        \item $x_1=5, -x_1+2x_2=4$ 交点：$(5, 4.5)$
+        \item $x_1=0, -x_1+2x_2=4$ 交点：$(0, 2)$
+    \end{itemize}
+    
+    代入目标函数 $\max Z = 2x_1 + x_2$ 中，有：
+    \begin{itemize}
+        \item $Z(0, 0) = 0$
+        \item $Z(5, 0) = 10$
+        \item $Z(5, 4.5) = 2 \times 5 + 4.5 = 14.5$
+        \item $Z(0, 2) = 2 \times 0 + 2 = 2$
+    \end{itemize}
+    比较可得，当 $x_1 = 5, x_2 = 4.5$ 时，目标函数有最大值 $Z_{\max} = 14.5$。
+    
+    \vspace{1em}
+    \textbf{（2）}将该线性规划问题化为标准形：
+    引入松弛变量 $x_3 \ge 0, x_4 \ge 0$。模型变为：
+    $$
+    \begin{aligned}
+        \max \quad & Z = 2x_1 + x_2 \\
+        \text{s.t.} \quad 
+        & -x_1 + 2x_2 + x_3 = 4 \\
+        & x_1 + x_4 = 5 \\
+        & x_1, x_2, x_3, x_4 \ge 0
+    \end{aligned}
+    $$
+    
+    原问题的系数矩阵为 $A = (P_1, P_2, P_3, P_4) = \begin{pmatrix} -1 & 2 & 1 & 0 \\ 1 & 0 & 0 & 1 \end{pmatrix}$。
+    
+    任取其中两个列向量且它们线性无关，即可构成一个基。共有 $C_4^2 = 6$ 种可能组合。计算如下：
+    \begin{enumerate}
+        \item $B_1 = (P_1, P_2) = \begin{pmatrix} -1 & 2 \\ 1 & 0 \end{pmatrix}$。行列式为 $-2 \neq 0$，是基。求解方程组得基本解 $X_1 = (5, 4.5, 0, 0)^T$。这是\textbf{基本可行解}，即基 $B_1$ 是\textbf{可行基}。目标函数值 $Z = 14.5$。对应可行域的顶点为 $(5, 4.5)$。
+        \item $B_2 = (P_1, P_3) = \begin{pmatrix} -1 & 1 \\ 1 & 0 \end{pmatrix}$。行列式为 $-1 \neq 0$，是基。求解得基本解 $X_2 = (5, 0, 9, 0)^T$。这是\textbf{基本可行解}，即基 $B_2$ 是\textbf{可行基}。目标函数值 $Z = 10$。对应可行域的顶点为 $(5, 0)$。
+        \item $B_3 = (P_1, P_4) = \begin{pmatrix} -1 & 0 \\ 1 & 1 \end{pmatrix}$。行列式为 $-1 \neq 0$，是基。求解得基本解 $X_3 = (-4, 0, 0, 9)^T$。有分量为负，因此\textbf{不是}可行基本解，$B_3$ 不是可行基。
+        \item $B_4 = (P_2, P_3) = \begin{pmatrix} 2 & 1 \\ 0 & 0 \end{pmatrix}$。行列式为 $0$，列向量线性相关，\textbf{不是基}。
+        \item $B_5 = (P_2, P_4) = \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix}$。行列式为 $2 \neq 0$，是基。求解得基本解 $X_5 = (0, 2, 0, 5)^T$。这是\textbf{基本可行解}，即基 $B_5$ 是\textbf{可行基}。目标函数值 $Z = 2$。对应可行域的顶点为 $(0, 2)$。
+        \item $B_6 = (P_3, P_4) = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}$。行列式为 $1 \neq 0$，是基。求解得基本解 $X_6 = (0, 0, 4, 5)^T$。这是\textbf{基本可行解}，即基 $B_6$ 是\textbf{可行基}。目标函数值 $Z = 0$。对应可行域的顶点为 $(0, 0)$。
+    \end{enumerate}
+    
+    综上所述，所有的基为 $B_1, B_2, B_3, B_5, B_6$；其中可行基为 $B_1, B_2, B_5, B_6$。
+    
+    比较所有可行解的目标函数值可知，最优解为 $X_1 = (5, 4.5, 0, 0)^T$，此时最大值为 $14.5$。
+\end{proof}
+
+\begin{problem}[6.14]
+\end{problem}
+
+\begin{proof}
+    设对偶变量分别为 $y_1, y_2, y_3$。
+    
+    由于原问题是最大化问题（$\max$），根据线性规划的对称对偶定理映射规则，对偶问题是最小化问题（$\min$），并满足以下对应关系：
+    \begin{itemize}
+        \item \textbf{对偶变量的符号}（由原问题的约束条件类型决定）：
+        \begin{itemize}
+            \item 第 1 个约束为主约束 ``$\le$''（与 $\max$ 匹配），故 $y_1 \ge 0$；
+            \item 第 2 个约束为反约束 ``$\ge$''，故 $y_2 \le 0$；
+            \item 第 3 个约束为等式 ``$=$''，故 $y_3$ 无约束（自由变量）。
+        \end{itemize}
+        \item \textbf{对偶问题的约束条件}（由于原变量的非负性决定）：
+        \begin{itemize}
+            \item $x_1 \ge 0, x_2 \ge 0, x_3 \ge 0$（原变量非负部分），对应对偶问题的第 1、2、3 个约束均为 ``$\ge$''（主约束，与 $\min$ 匹配）；
+            \item $x_4$ 任意（原变量自由），对应对偶问题的第 4 个约束为 ``$=$'' 约束。
+        \end{itemize}
+    \end{itemize}
+    
+    综合目标函数系数和约束条件常数互换的规则，该问题的对偶问题如下：
+    
+    $$
+    \begin{aligned}
+        \min \quad & W = 6y_1 + 5y_2 - 4y_3 \\
+        \text{s.t.} \quad 
+        & y_1 + y_2 + 2y_3 \ge 3 \\
+        & y_1 - 2y_2 + y_3 \ge -2 \\
+        & -y_1 + y_2 - 3y_3 \ge 1 \\
+        & -y_1 + y_3 = 4 \\
+        & y_1 \ge 0, \ y_2 \le 0, \ y_3 \text{ 任意}
+    \end{aligned}
+    $$
+\end{proof}
+
+\vspace{1em}
+
+\end{document}
