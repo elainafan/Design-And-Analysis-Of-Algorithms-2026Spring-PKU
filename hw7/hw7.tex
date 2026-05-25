@@ -1,0 +1,141 @@
+%!TEX TS-program = xelatex
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[fontset=windows]{ctex}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\usepackage{enumitem}
+
+\newtheorem{problem}{题}
+\renewcommand{\proofname}{\textbf{解答}}
+\usepackage[margin=1in]{geometry}
+
+\title{算法设计与分析 作业七}
+\author{xxxxxxxxx xxx}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{problem}[9.5]
+\end{problem}
+
+\begin{proof}
+    \begin{enumerate}[label=(\arabic*)]
+        \item 由独立集到团。给定无向图 $G=(V,E)$ 和整数 $J$，构造补图
+        $\overline{G}=(V,\overline{E})$，其中
+        \[
+            \overline{E}=\{(u,v)\mid u,v\in V,\ u\ne v,\ (u,v)\notin E\}.
+        \]
+        并令团问题中的整数仍为 $J$。若 $S$ 是 $G$ 中大小至少为 $J$ 的独立集，则任意
+        $u,v\in S$ 在 $G$ 中不相邻，于是在 $\overline{G}$ 中相邻，所以 $S$ 是
+        $\overline{G}$ 中的团。反过来也成立。因此该变换是多项式时间变换。
+
+        \item 由顶点覆盖到团。给定无向图 $G=(V,E)$ 和整数 $K$，构造补图
+        $\overline{G}$，并令
+        \[
+            J=|V|-K.
+        \]
+        若 $C$ 是 $G$ 中大小不超过 $K$ 的顶点覆盖，则 $V-C$ 是 $G$ 的独立集，因而是
+        $\overline{G}$ 中大小至少为 $J$ 的团。反过来，若 $\overline{G}$ 有大小至少为
+        $J$ 的团 $S$，则 $S$ 是 $G$ 的独立集，所以 $V-S$ 是 $G$ 的顶点覆盖，且大小不超过
+        $K$。故 $VC\le_p$ 团。
+
+        \item 由哈密顿回路到子图同构。给定无向图 $G=(V,E)$，令
+        $H=(V_1,E_1)$ 为含 $|V|$ 个顶点的简单环。若 $H$ 同构于 $G$ 的某个子图，则这个
+        子图正是一条经过所有顶点一次的回路，即 $G$ 有哈密顿回路；反之，$G$ 的哈密顿
+        回路显然给出一个与 $H$ 同构的子图。因此 $HC\le_p$ 子图同构。
+
+        \item 由团到 $0$-$1$ 整数规划。给定无向图 $G=(V,E)$ 和整数 $J$，设
+        $V=\{v_1,\ldots,v_n\}$，为每个顶点引入变量 $x_i\in\{0,1\}$。构造约束
+        \[
+            \sum_{i=1}^n x_i\ge J,
+        \]
+        并且对每一对不相邻的顶点 $v_i,v_j$ 加入
+        \[
+            x_i+x_j\le 1.
+        \]
+        若 $G$ 中存在大小至少为 $J$ 的团，则把团中顶点对应变量取 $1$，其余取 $0$，得到
+        可行解。反之，任何可行解中所有取 $1$ 的顶点两两相邻，且个数至少为 $J$，所以它们
+        构成团。该整数规划规模显然是多项式的。
+    \end{enumerate}
+\end{proof}
+
+\vspace{1em}
+
+\begin{problem}[9.10]
+\end{problem}
+
+\begin{proof}
+    已知 $\Pi'$ 是 NP 完全问题，且 $\Pi'\le_p \Pi$。由于 $\Pi'$ 是 NP 完全的，对任意
+    $\Pi''\in NP$，都有
+    \[
+        \Pi''\le_p \Pi'.
+    \]
+    又因为多项式时间归约具有传递性，得到
+    \[
+        \Pi''\le_p \Pi'\le_p \Pi,
+    \]
+    从而任意 NP 问题都可多项式时间归约到 $\Pi$，即 $\Pi$ 是 NP 难的。
+
+    题设还给出 $\Pi\in NP$，所以 $\Pi$ 既属于 NP 又是 NP 难的，故 $\Pi$ 是 NP 完全的。
+\end{proof}
+
+\vspace{1em}
+
+\begin{problem}[9.15]
+\end{problem}
+
+\begin{proof}
+    先说明子图同构属于 NP。证书可以取为一个映射
+    $f:V_1\to V$。验证时只需检查 $f$ 是否为单射，并对每条
+    $(u,v)\in E_1$ 检查 $(f(u),f(v))\in E$，这些都能在多项式时间内完成。
+
+    再证明它是 NP 难的。由哈密顿回路问题归约。给定哈密顿回路实例
+    $G=(V,E)$，构造子图同构实例 $(G,H)$，其中 $H$ 是一个包含 $|V|$ 个顶点的简单环。
+    若 $G$ 有哈密顿回路，则这条回路给出了 $H$ 到 $G$ 的子图同构。反过来，若 $G$ 中
+    有一个子图与 $H$ 同构，因为 $H$ 的顶点数正好为 $|V|$，该子图必经过 $G$ 的所有顶点，
+    因而就是 $G$ 的哈密顿回路。
+
+    该构造显然可在多项式时间内完成，且哈密顿回路是 NP 完全问题，所以子图同构是
+    NP 难的。结合子图同构属于 NP，故子图同构是 NP 完全的。
+\end{proof}
+
+\vspace{1em}
+
+\begin{problem}[9.19]
+\end{problem}
+
+\begin{proof}
+    先说明支配集属于 NP。证书为一个顶点子集 $V'\subseteq V$。验证时检查
+    $|V'|\le K$，并检查每个顶点要么属于 $V'$，要么与 $V'$ 中某个顶点相邻，均可在
+    多项式时间内完成。
+
+    下面由顶点覆盖归约到支配集。给定顶点覆盖实例 $G=(V,E)$ 和整数 $K$，构造图
+    $G'=(V',E')$。令
+    \[
+        V'=V\cup E,
+    \]
+    即把原图每条边也看成一个新顶点。边集由两部分组成：第一部分使原顶点集合 $V$ 构成
+    完全图；第二部分中，对每条原边 $e=(u,v)$，把新顶点 $e$ 分别与 $u$ 和 $v$ 相连。令
+    支配集实例的整数仍为 $K$。该构造规模为多项式。
+
+    若 $C$ 是 $G$ 中大小不超过 $K$ 的顶点覆盖，则 $C$ 在 $G'$ 中支配所有顶点：原顶点
+    由于 $V$ 构成完全图而被 $C$ 支配；每个边顶点 $e=(u,v)$ 至少有一个端点在 $C$ 中，
+    因而也被支配。所以 $G'$ 有大小不超过 $K$ 的支配集。
+
+    反过来，设 $D$ 是 $G'$ 中大小不超过 $K$ 的支配集。若 $D$ 中含有边顶点
+    $e=(u,v)$，则可用端点 $u$ 替换它。因为 $V$ 是完全图，$u$ 能支配所有原顶点；同时
+    $u$ 至少支配边顶点 $e$，替换不会增加集合大小。不断替换后，可得到一个只含原顶点的
+    支配集 $D'\subseteq V$，且 $|D'|\le K$。若原图某条边 $e=(u,v)$ 的两个端点都不在
+    $D'$ 中，则边顶点 $e$ 在 $G'$ 中只与 $u,v$ 相邻，且自身也不在 $D'$ 中，无法被支配，
+    矛盾。因此 $D'$ 覆盖了 $G$ 的每条边，是大小不超过 $K$ 的顶点覆盖。
+
+    于是顶点覆盖多项式时间归约到支配集。由于顶点覆盖是 NP 完全的，支配集属于 NP 且
+    NP 难，所以支配集是 NP 完全的。
+\end{proof}
+
+\end{document}
