@@ -1,0 +1,189 @@
+%!TEX TS-program = xelatex
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[fontset=windows]{ctex}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\usepackage{enumitem}
+
+\newtheorem{problem}{题}
+\renewcommand{\proofname}{\textbf{解答}}
+\usepackage[margin=1in]{geometry}
+
+\title{算法设计与分析 作业八}
+\author{xxxxxxxxx xxx}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{problem}[10.1]
+\end{problem}
+
+\begin{proof}
+    修改后的算法仍然能得到一个顶点覆盖。因为每次选定一条边后，加入该边的一个端点，并删去
+    所有与该端点关联的边；这些被删去的边都已经由这个端点覆盖。算法结束时没有未删去的边，
+    所以原图每条边都至少有一个端点被选入集合中。
+
+    但是，它已经不再具有常数近似比。设图为一个有 $n$ 个顶点的星形图，中心为 $c$，
+    叶子为 $v_1,v_2,\ldots,v_{n-1}$。最优顶点覆盖只需选中心点 $c$，所以
+    \[
+        \mathrm{OPT}(I)=1.
+    \]
+    如果修改后的算法每次在边 $(c,v_i)$ 中只选择叶子 $v_i$，则每次只能覆盖并删去这一条边，
+    最终会选入所有 $n-1$ 个叶子，因此
+    \[
+        A(I)=n-1.
+    \]
+    于是近似比为
+    \[
+        \frac{A(I)}{\mathrm{OPT}(I)}=n-1.
+    \]
+
+    另一方面，对任意有边图，算法至多选入 $n$ 个顶点，而 $\mathrm{OPT}(I)\ge 1$，
+    因而平凡上界为 $n$。综上，这个修改后的算法最坏情况下的近似性能为 $\Theta(n)$，
+    不能保证任何常数近似比。
+\end{proof}
+
+\vspace{1em}
+
+\begin{problem}[10.3]
+\end{problem}
+
+\begin{proof}
+    设首次适合算法最终使用了 $k=\mathrm{FF}(I)$ 只箱子，箱子容量为 $B$，
+    第 $i$ 只箱子的最终装载量为 $L_i$。我们先证明首次适合算法的一个关键性质：若
+    $i<j$，则
+    \[
+        L_i+L_j>B.
+    \]
+    事实上，第 $j$ 只箱子被打开时，设放入它的第一件物品重量为 $x$。由于这是首次适合
+    算法，物品 $x$ 放不进任何已经打开的箱子，特别地放不进第 $i$ 只箱子，所以当时第
+    $i$ 只箱子的剩余容量小于 $x$。之后第 $i$ 只箱子的装载量只会增加，因此最终仍有
+    $L_i+x>B$。又因为 $L_j\ge x$，于是 $L_i+L_j>B$。
+
+    记所有物品总重量为
+    \[
+        W=\sum_{j=1}^n w_j.
+    \]
+    任一装箱方案每只箱子最多装 $B$，所以
+    \[
+        \mathrm{OPT}(I)\ge \frac{W}{B}.
+    \]
+
+    若 $k$ 为偶数，把箱子两两配对为 $(1,2),(3,4),\ldots,(k-1,k)$。由上面的性质，
+    每一对箱子的总装载量都大于 $B$，故
+    \[
+        W>\frac{k}{2}B.
+    \]
+    因此 $\mathrm{OPT}(I)>k/2$，从而 $k<2\mathrm{OPT}(I)$。
+
+    若 $k$ 为奇数且 $k\ge 3$，把前 $k-1$ 只箱子两两配对，得到
+    \[
+        W>\frac{k-1}{2}B.
+    \]
+    因此 $\mathrm{OPT}(I)>(k-1)/2$。由于 $\mathrm{OPT}(I)$ 是整数，而 $k$ 是奇数，
+    得到
+    \[
+        \mathrm{OPT}(I)\ge \frac{k+1}{2},
+    \]
+    即 $k\le 2\mathrm{OPT}(I)-1<2\mathrm{OPT}(I)$。当 $k=1$ 时结论显然成立。
+
+    综上，对装箱问题的所有实例 $I$，都有
+    \[
+        \mathrm{FF}(I)<2\mathrm{OPT}(I).
+    \]
+\end{proof}
+
+\vspace{1em}
+
+\begin{problem}[10.4]
+\end{problem}
+
+\begin{proof}
+    用反证法证明。假设存在一个多项式时间近似算法 $A$，其近似比为某个
+    $r<\frac{3}{2}$。我们将说明这会推出 $P=NP$。
+
+    考虑划分问题：给定正整数 $a_1,a_2,\ldots,a_n$，判断能否把它们划分成两个子集，
+    使得两个子集的元素和相等。该问题是 NP 完全的。若总和
+    \[
+        S=\sum_{i=1}^n a_i
+    \]
+    为奇数，则显然不存在这样的划分；下面只需考虑 $S$ 为偶数的情形。令
+    \[
+        B=\frac{S}{2},
+    \]
+    若存在某个 $a_i>B$，也显然不存在等和划分；否则构造一个装箱问题实例：箱子容量为
+    $B$，物品重量分别为 $a_1,a_2,\ldots,a_n$。
+
+    如果原划分问题有解，则所有物品可以刚好分成两组，每组总重量为 $B$，所以装箱问题的
+    最优值为
+    \[
+        \mathrm{OPT}(I)=2.
+    \]
+    此时近似算法 $A$ 的输出箱数满足
+    \[
+        A(I)\le r\mathrm{OPT}(I)=2r<3.
+    \]
+    由于箱数是整数，且总重量为 $2B$，所以 $A(I)=2$。
+
+    反过来，如果原划分问题无解，则不可能用两只箱子装下所有物品，因而任意可行装箱方案
+    都至少使用三只箱子，即算法输出必有 $A(I)\ge 3$。
+
+    因此，只要运行算法 $A$，并检查其输出是否为 $2$，就能在多项式时间内判定划分问题。
+    这与划分问题的 NP 完全性矛盾，除非 $P=NP$。所以，除非 $P=NP$，装箱问题不存在
+    近似比
+    \[
+        r<\frac{3}{2}
+    \]
+    的多项式时间近似算法。
+\end{proof}
+
+\vspace{1em}
+
+\begin{problem}[10.5]
+\end{problem}
+
+\begin{proof}
+    首先说明算法会终止。设当前割边数为 $C$。若存在顶点 $u$，它关联的非割边数严格多于
+    割边数，则把 $u$ 移到另一侧后，与 $u$ 关联的边都会改变状态：原来的非割边变成割边，
+    原来的割边变成非割边。因此割边数增加量等于
+    \[
+        \text{非割边数}-\text{割边数}>0.
+    \]
+    由于割边总数至多为 $|E|$，算法只能改进有限次，故必定终止。
+
+    设算法终止时得到的割为 $(V_1,V_2)$，其割边数为
+    \[
+        \mathrm{MCUT}(I)=C.
+    \]
+    对每个顶点 $v$，记 $c(v)$ 为与 $v$ 关联的割边数，记 $n(v)$ 为与 $v$ 关联的非割边数。
+    算法终止时，不存在可改进顶点，因此对所有 $v\in V$ 都有
+    \[
+        n(v)\le c(v).
+    \]
+    对所有顶点求和，得到
+    \[
+        \sum_{v\in V} n(v)\le \sum_{v\in V} c(v).
+    \]
+    每条割边被它的两个端点各计一次，每条非割边也被它的两个端点各计一次，所以若非割边数
+    为 $N$，则
+    \[
+        2N\le 2C,
+    \]
+    即 $N\le C$。于是图中总边数满足
+    \[
+        |E|=C+N\le 2C.
+    \]
+
+    任意割集的边数都不超过图的总边数，因此
+    \[
+        \mathrm{OPT}(I)\le |E|\le 2C=2\mathrm{MCUT}(I).
+    \]
+    这说明算法 MCUT 是最大割集问题的一个 $2$ 近似算法。
+\end{proof}
+
+\end{document}
